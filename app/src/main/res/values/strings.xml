@@ -3,4 +3,5 @@
     <integer name="default_score">0</integer>
     <string name="saved_high_score">com.example.khalid.savingdata.high_score</string>
     <string name="save">Save</string>
+    <string name="saveInternalFile">Save Internal File</string>
 </resources>

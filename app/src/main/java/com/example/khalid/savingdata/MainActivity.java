@@ -8,6 +8,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.FileOutputStream;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -34,5 +37,20 @@ public class MainActivity extends AppCompatActivity {
         editor.putInt(getString(R.string.saved_high_score), value);
         editor.commit();
         score.setText(Integer.toString(value));
+    }
+
+    public void createInternalFile(View view) {
+        FileOutputStream outputStream;
+        String filename = "myfile";
+        String string = "Hello world!";
+        //File[] fileList = getFilesDir().listFiles();
+
+        try {
+            outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
+            outputStream.write(string.getBytes());
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
