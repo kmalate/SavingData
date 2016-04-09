@@ -1,7 +1,9 @@
 package com.example.khalid.savingdata;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,11 +14,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 
 public class MainActivity extends AppCompatActivity {
+    FeedReaderDbHelper mDbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mDbHelper = new FeedReaderDbHelper(this);
 
         TextView score = (TextView)findViewById(R.id.score);
         SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
@@ -52,5 +56,22 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void saveEntry(View view){
+        // Gets the data repository in write mode
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+        // Create a new map of values, where column names are the keys
+        EditText title = (EditText)findViewById(R.id.title);
+        EditText subTitle =(EditText)findViewById(R.id.subtitle);
+
+        ContentValues values = new ContentValues();
+        values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_TITLE, title.getText().toString());
+        values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_SUBTITLE, subTitle.getText().toString());
+        // Insert the new row, returning the primary key value of the new row
+        long newRowId;
+        newRowId = db.insert(
+                FeedReaderContract.FeedEntry.TABLE_NAME, "", values);
     }
 }

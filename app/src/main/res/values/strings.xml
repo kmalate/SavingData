@@ -4,4 +4,8 @@
     <string name="saved_high_score">com.example.khalid.savingdata.high_score</string>
     <string name="save">Save</string>
     <string name="saveInternalFile">Save Internal File</string>
+    <string name="savingDataInDatabase">Saving Data in Database</string>
+    <string name="title">Title</string>
+    <string name="subtitle">Subtitle</string>
+    <string name="New">New</string>
 </resources>
