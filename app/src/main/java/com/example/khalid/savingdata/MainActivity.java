@@ -3,6 +3,7 @@ package com.example.khalid.savingdata;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +17,10 @@ import java.io.FileOutputStream;
 public class MainActivity extends AppCompatActivity {
     FeedReaderDbHelper mDbHelper;
 
+    private void addEntryRow(String title, String subTitle) {
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +33,39 @@ public class MainActivity extends AppCompatActivity {
         int highScore = sharedPreferences.getInt(getString(R.string.saved_high_score), defaultValue);
         score.setText(Integer.toString(highScore));
         //score.setText(highScore);
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+
+        // Define a projection that specifies which columns from the database
+        // you will actually use after this query.
+        String[] projection = {
+                FeedReaderContract.FeedEntry._ID,
+                FeedReaderContract.FeedEntry.COLUMN_NAME_TITLE,
+                FeedReaderContract.FeedEntry.COLUMN_NAME_SUBTITLE
+        };
+
+        String [] whereValues = {};
+
+        // How you want the results sorted in the resulting Cursor
+        String sortOrder = FeedReaderContract.FeedEntry.COLUMN_NAME_TITLE + " DESC";
+
+        Cursor c = db.query(
+                FeedReaderContract.FeedEntry.TABLE_NAME, //Table to query
+                projection, //columns to return
+                "", //columns for the where clause
+                whereValues, // the values for the where clause
+                null, // don't group the rows
+                null, // don't filter by row groups
+                sortOrder // sort Order
+        );
+
+        try {
+            while (c.moveToNext()) {
+                int index = c.getColumnIndex(FeedReaderContract.FeedEntry._ID);
+                String title = "";
+            }
+        } finally {
+            c.close();
+        }
     }
 
     public void saveHighScore(View view) {

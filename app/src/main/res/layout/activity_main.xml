@@ -82,4 +82,23 @@
             android:onClick="saveEntry"/>
     </LinearLayout>
 
+    <TableLayout
+        android:id="@+id/entryTable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <TextView android:text="@string/title"
+                android:layout_width="fill_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_height="wrap_content"
+                android:padding="5dp" />
+            <TextView android:text="@string/subtitle"
+                android:layout_width="fill_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:padding="5dp"
+                android:layout_height="wrap_content"/>
+        </TableRow>
+    </TableLayout>
 </LinearLayout>
