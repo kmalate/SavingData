@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,30 +13,23 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import java.io.File;
 import java.io.FileOutputStream;
 
 public class MainActivity extends AppCompatActivity {
     FeedReaderDbHelper mDbHelper;
     TableLayout entryTable;
 
-    private void addEntryRow(String title, String subTitle) {
+    private void addEntryRow(long id, String title, String subTitle) {
         TableRow tableRow = new TableRow(this);
-        tableRow.setLayoutParams(
-                new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
-                        TableRow.LayoutParams.WRAP_CONTENT));
-        ActionBar.LayoutParams textViewLayoutParams = new ActionBar.LayoutParams(
-                android.app.ActionBar.LayoutParams.WRAP_CONTENT,
-                android.app.ActionBar.LayoutParams.WRAP_CONTENT);
+        tableRow.setTag(id);
         TextView titleView = new TextView(this);
-        titleView.setLayoutParams(textViewLayoutParams);
         titleView.setText(title);
         tableRow.addView(titleView);
         TextView subTitleView = new TextView(this);
-        subTitleView.setLayoutParams(textViewLayoutParams);
         subTitleView.setText(subTitle);
         tableRow.addView(subTitleView);
         entryTable.addView(tableRow);
+        //entryTable.refreshDrawableState();
     }
 
     @Override
@@ -80,10 +72,10 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             while (c.moveToNext()) {
-                int index = c.getColumnIndex(FeedReaderContract.FeedEntry._ID);
+                long id = c.getLong(c.getColumnIndex(FeedReaderContract.FeedEntry._ID));
                 String title = c.getString(c.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_NAME_TITLE));
                 String subTitle = c.getString(c.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_NAME_SUBTITLE));
-                addEntryRow(title, subTitle);
+                addEntryRow(id, title, subTitle);
             }
         } finally {
             c.close();
@@ -133,5 +125,6 @@ public class MainActivity extends AppCompatActivity {
         long newRowId;
         newRowId = db.insert(
                 FeedReaderContract.FeedEntry.TABLE_NAME, "", values);
+        addEntryRow(newRowId, title.getText().toString(), subTitle.getText().toString());
     }
 }
