@@ -81,7 +81,9 @@
             android:text="@string/save"
             android:onClick="saveEntry"/>
     </LinearLayout>
-
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">x
     <TableLayout
         android:id="@+id/entryTable"
         android:layout_width="match_parent"
@@ -101,4 +103,5 @@
                 android:layout_height="wrap_content"/>
         </TableRow>
     </TableLayout>
+ </ScrollView>
 </LinearLayout>

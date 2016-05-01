@@ -8,4 +8,5 @@
     <string name="title">Title</string>
     <string name="subtitle">Subtitle</string>
     <string name="New">New</string>
+    <string name="delete">Delete</string>
 </resources>

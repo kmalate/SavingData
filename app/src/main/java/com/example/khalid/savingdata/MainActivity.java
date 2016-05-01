@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -19,6 +20,20 @@ public class MainActivity extends AppCompatActivity {
     FeedReaderDbHelper mDbHelper;
     TableLayout entryTable;
 
+    private View.OnClickListener deleteClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            long id = (long)v.getTag();
+            //Define where part of the query
+            String selection = FeedReaderContract.FeedEntry._ID + " = ?";
+            // specify arguments in placholder order
+            String[] selectionArgs = { String.valueOf(id) };
+            SQLiteDatabase db = mDbHelper.getWritableDatabase();
+            db.delete(FeedReaderContract.FeedEntry.TABLE_NAME, selection, selectionArgs);
+            removeEntryRow(id);
+        }
+    };
+
     private void addEntryRow(long id, String title, String subTitle) {
         TableRow tableRow = new TableRow(this);
         tableRow.setTag(id);
@@ -28,8 +43,28 @@ public class MainActivity extends AppCompatActivity {
         TextView subTitleView = new TextView(this);
         subTitleView.setText(subTitle);
         tableRow.addView(subTitleView);
+        Button btnDelete = new Button(this);
+        btnDelete.setTag(id);
+        btnDelete.setText(R.string.delete);
+        btnDelete.setOnClickListener(deleteClickListener);
+        tableRow.addView(btnDelete);
         entryTable.addView(tableRow);
         //entryTable.refreshDrawableState();
+    }
+
+    private void removeEntryRow(long id) {
+        for(int i = 0;i < entryTable.getChildCount();i++) {
+            Object tag = entryTable.getChildAt(i).getTag();
+            if (tag == null) {
+                continue;
+            }
+            if (tag.getClass().equals(Long.class)) {
+                if (id == (long)tag) {
+                    entryTable.removeViewAt(i);
+                    break;
+                }
+            }
+        }
     }
 
     @Override
